@@ -1,6 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import SettingsIcon from "./assets/icon-settings.svg";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import { LinearGradient } from "expo-linear-gradient";
+import { Shadow } from "react-native-shadow-2";
 
 export default function App() {
   return (
@@ -20,10 +23,55 @@ export default function App() {
             </View>
           </View>
         </View>
-        <View style={styles.timerPlaceholder}>
-          <Text>TIMER PLACEHOLDER</Text>
+        <View>
+          <Shadow
+            distance={100}
+            offset={[-50, -50]}
+            startColor={"rgba(39, 44, 90, 0.2)"}
+            endColor={"rgba(39, 44, 90, 0)"}
+            style={styles.borderShadow}
+          >
+            <Shadow
+              distance={100}
+              offset={[50, 50]}
+              startColor={"rgba(18, 21, 48, 0.3)"}
+              endColor={"rgba(18, 21, 48, 0)"}
+              style={styles.borderShadow}
+            >
+              <LinearGradient
+                colors={["#0E112A", "#2E325A"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.timerContainer}
+              >
+                <View style={styles.timerInnerCircle}>
+                  <CountdownCircleTimer
+                    isPlaying
+                    duration={120}
+                    colors={"#F87070"}
+                    size={248}
+                    trailColor="rgba(0, 0, 0, 0)"
+                  >
+                    {({ remainingTime }) => (
+                      <View style={styles.displayContainer}>
+                        <Text style={[styles.timeRemainingText]}>
+                          {String(Math.floor(remainingTime / 60)).padStart(
+                            2,
+                            "0"
+                          ) +
+                            ":" +
+                            String(remainingTime % 60).padStart(2, "0")}
+                        </Text>
+                        <Text style={styles.timerStatusToggleText}>PAUSE</Text>
+                      </View>
+                    )}
+                  </CountdownCircleTimer>
+                </View>
+              </LinearGradient>
+            </Shadow>
+          </Shadow>
         </View>
-        <Pressable>
+        <Pressable style={styles.optionsButton}>
           <SettingsIcon fill="black" />
         </Pressable>
       </View>
@@ -38,25 +86,27 @@ const styles = StyleSheet.create({
   },
   appContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "space-between",
-    flexDirection: 'column',
+    flexDirection: "column",
     paddingTop: 80,
     paddingBottom: 48,
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
   },
   title: {
     fontSize: 24,
-    color: '#D7E0FF',
+    color: "#D7E0FF",
     fontWeight: "bold",
+    zIndex: 2,
   },
   outerStatusContainer: {
-    width: '100%',
+    width: "100%",
     height: 63,
     backgroundColor: "#161932",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 33
+    borderRadius: 33,
+    zIndex: 2,
   },
   nestedStatusContainer: {
     flexDirection: "row",
@@ -65,17 +115,17 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 100,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   statusCapsule: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    height: "100%"
+    height: "100%",
   },
   activeStatus: {
     backgroundColor: "#F87070",
-    borderRadius: 100
+    borderRadius: 100,
   },
   activeStatusText: {
     color: "#1E213F",
@@ -92,10 +142,44 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     textAlignVertical: "center",
   },
-  timerPlaceholder: {
+  timerContainer: {
     width: 300,
     height: 300,
-    backgroundColor: "red",
-    borderRadius: 150
-  }
+    borderRadius: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    // zIndex: 2,
+  },
+  timerInnerCircle: {
+    width: 268,
+    height: 268,
+    borderRadius: 134,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#161932",
+  },
+  displayContainer: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 150,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  timeRemainingText: {
+    color: "#D7E0FF",
+    fontSize: 80,
+    fontWeight: "bold",
+  },
+  timerStatusToggleText: {
+    color: "#D7E0FF",
+    fontSize: 14,
+    fontWeight: "bold",
+    letterSpacing: 13,
+  },
+  borderShadow: {
+    zIndex: 1
+  },
+  optionsButton: {
+    zIndex: 2,
+  },
 });
