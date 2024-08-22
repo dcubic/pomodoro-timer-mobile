@@ -1,26 +1,165 @@
 import { StatusBar } from "expo-status-bar";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import SettingsIcon from "./assets/icon-settings.svg";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Shadow } from "react-native-shadow-2";
+import { useCallback, useEffect, useState } from "react";
+import { Vibration } from "react-native";
+
+import CloseIcon from "./assets/icon-close.svg";
+
+const BOOT_TIMER_DURATIONS = {
+  active: 1,
+  shortBreak: 1,
+  longBreak: 1,
+};
+
+enum TimerState {
+  Active = "pomodoro",
+  ShortBreak = "short break",
+  LongBreak = "long break",
+}
+
+const BOOT_ACTIVE_STATE_COUNT = 4;
+const LONG_PRESS_DURATION = 1000;
+const VIBRATION_DURATION = 30;
 
 export default function App() {
+  const [initialTimerDurations, setInitialTimerDurations] =
+    useState(BOOT_TIMER_DURATIONS);
+  const [timerDuration, setTimerDuration] = useState(
+    BOOT_TIMER_DURATIONS.active
+  );
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [timerKey, setTimerKey] = useState(0);
+  const [countBeforeLongBreak, setCountBeforeLongBreak] = useState(
+    BOOT_ACTIVE_STATE_COUNT
+  );
+  const [stateCounter, setStateCounter] = useState(0);
+  const [isLongPressing, setIsLongPressing] = useState(false);
+  const [longPressTimer, setLongPressTimer] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+  const [beforePressPlayingState, setBeforePressPlayingState] = useState(false);
+
+  const getActiveTimerState = () => {
+    if (stateCounter % 2 === 0) {
+      return TimerState.Active;
+    } else if (
+      stateCounter % (2 * countBeforeLongBreak) ===
+      2 * countBeforeLongBreak - 1
+    ) {
+      return TimerState.LongBreak;
+    } else {
+      return TimerState.ShortBreak;
+    }
+  };
+
+  const getStatusStyle = (timerState: TimerState) => {
+    if (timerState === getActiveTimerState()) {
+      return [styles.statusCapsule, styles.activeStatus];
+    }
+
+    return styles.statusCapsule;
+  };
+
+  const setTimerState = (timerState: TimerState, shouldPlay: boolean) => {
+    if (timerState === TimerState.Active) {
+      setTimerDuration(initialTimerDurations.active);
+    } else if (timerState === TimerState.ShortBreak) {
+      setTimerDuration(initialTimerDurations.shortBreak);
+    } else {
+      setTimerDuration(initialTimerDurations.longBreak);
+    }
+
+    setIsPlaying(shouldPlay);
+    resetCircleTimer();
+  };
+
+  useEffect(() => {
+    setTimerState(getActiveTimerState(), stateCounter !== 0);
+  }, [stateCounter]);
+
+  const handleTimerCompletion = () => {
+    setStateCounter((counterCurrent) => counterCurrent + 1);
+  };
+
+  const resetCircleTimer = () => {
+    setTimerKey((oldTimerKey) => oldTimerKey + 1);
+  };
+
+  const resetPomodoroTimer = () => {
+    resetCircleTimer();
+    setStateCounter(0);
+    setIsPlaying(false);
+  };
+
+  const handlePressIn = () => {
+    Vibration.vibrate(VIBRATION_DURATION);
+    setBeforePressPlayingState(isPlaying);
+    const timer = setTimeout(() => {
+      resetPomodoroTimer();
+      setIsLongPressing(false);
+      Vibration.vibrate(VIBRATION_DURATION);
+    }, LONG_PRESS_DURATION);
+    setLongPressTimer(timer);
+    setIsLongPressing(true);
+    setIsPlaying(false);
+  };
+
+  const handlePressOut = useCallback(() => {
+    if (longPressTimer !== null) {
+      clearTimeout(longPressTimer);
+    }
+    setIsLongPressing(false);
+    setIsPlaying(!beforePressPlayingState);
+  }, [longPressTimer]);
+
+  const getTimerButtonText = () => {
+    if (isPlaying) return "PAUSE";
+    if (isLongPressing) return "RESTART";
+    return "PLAY";
+  };
+
   return (
     <View style={styles.background}>
+      <StatusBar style="light" />
+      <Modal transparent={false} visible={true}>
+        <View>
+          <View style={styles.modalHeaderContainer}>
+            <Text style={styles.settingsTitleText}>Settings</Text>
+            <CloseIcon></CloseIcon>
+          </View>
+          <View style={styles.modalContentContainer}>
+            <View>
+              <Text style={styles.optionsSectionTitle}>TIME (MINUTES)</Text>
+              
+            </View>
+            <View>
+
+            </View>
+            <View>
+
+            </View>
+          </View>
+          <Text>Test Modal text</Text>
+        </View>
+      </Modal>
       <View style={styles.appContainer}>
         <Text style={styles.title}>pomodoro</Text>
         <View style={styles.outerStatusContainer}>
           <View style={styles.nestedStatusContainer}>
-            <View style={[styles.statusCapsule, styles.activeStatus]}>
-              <Text style={styles.activeStatusText}>pomodoro</Text>
-            </View>
-            <View style={styles.statusCapsule}>
-              <Text style={styles.inactiveStatusText}>short break</Text>
-            </View>
-            <View style={styles.statusCapsule}>
-              <Text style={styles.inactiveStatusText}>long break</Text>
-            </View>
+            {Object.values(TimerState).map((timerState) => {
+              return (
+                <Pressable
+                  key={timerState}
+                  style={() => getStatusStyle(timerState)}
+                >
+                  <Text style={styles.activeStatusText}>{timerState}</Text>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
         <View>
@@ -46,14 +185,20 @@ export default function App() {
               >
                 <View style={styles.timerInnerCircle}>
                   <CountdownCircleTimer
-                    isPlaying
-                    duration={120}
+                    key={timerKey}
+                    isPlaying={isPlaying}
+                    duration={timerDuration}
                     colors={"#F87070"}
                     size={248}
                     trailColor="rgba(0, 0, 0, 0)"
+                    onComplete={handleTimerCompletion}
                   >
                     {({ remainingTime }) => (
-                      <View style={styles.displayContainer}>
+                      <Pressable
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                        style={styles.displayContainer}
+                      >
                         <Text style={[styles.timeRemainingText]}>
                           {String(Math.floor(remainingTime / 60)).padStart(
                             2,
@@ -62,8 +207,10 @@ export default function App() {
                             ":" +
                             String(remainingTime % 60).padStart(2, "0")}
                         </Text>
-                        <Text style={styles.timerStatusToggleText}>PAUSE</Text>
-                      </View>
+                        <Text style={styles.timerStatusToggleText}>
+                          {getTimerButtonText()}
+                        </Text>
+                      </Pressable>
                     )}
                   </CountdownCircleTimer>
                 </View>
@@ -148,7 +295,6 @@ const styles = StyleSheet.create({
     borderRadius: 150,
     justifyContent: "center",
     alignItems: "center",
-    // zIndex: 2,
   },
   timerInnerCircle: {
     width: 268,
@@ -161,9 +307,9 @@ const styles = StyleSheet.create({
   displayContainer: {
     height: "100%",
     width: "100%",
-    borderRadius: 150,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 500,
   },
   timeRemainingText: {
     color: "#D7E0FF",
@@ -177,9 +323,35 @@ const styles = StyleSheet.create({
     letterSpacing: 13,
   },
   borderShadow: {
-    zIndex: 1
+    zIndex: 1,
   },
   optionsButton: {
     zIndex: 2,
   },
+  modalHeaderContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E3E1E1",
+  },
+  settingsTitleText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#161932"
+  }, // Need to ensure close button style is correct // probably also needs a larger container
+  modalContentContainer: {
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  optionsSection: {
+    paddingVertical: 24
+  },
+  optionsSectionTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    letterSpacing: 4.23,
+    color: "#161932"
+  }
 });
