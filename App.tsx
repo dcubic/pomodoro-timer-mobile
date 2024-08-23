@@ -1,13 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import SettingsIcon from "./assets/icon-settings.svg";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Shadow } from "react-native-shadow-2";
 import { useCallback, useEffect, useState } from "react";
 import { Vibration } from "react-native";
-
-import CloseIcon from "./assets/icon-close.svg";
+import SettingsModal from "./src/components/settingsmodal/SettingsModal";
 
 const BOOT_TIMER_DURATIONS = {
   active: 1,
@@ -125,27 +124,7 @@ export default function App() {
   return (
     <View style={styles.background}>
       <StatusBar style="light" />
-      <Modal transparent={false} visible={true}>
-        <View>
-          <View style={styles.modalHeaderContainer}>
-            <Text style={styles.settingsTitleText}>Settings</Text>
-            <CloseIcon></CloseIcon>
-          </View>
-          <View style={styles.modalContentContainer}>
-            <View>
-              <Text style={styles.optionsSectionTitle}>TIME (MINUTES)</Text>
-              
-            </View>
-            <View>
-
-            </View>
-            <View>
-
-            </View>
-          </View>
-          <Text>Test Modal text</Text>
-        </View>
-      </Modal>
+      <SettingsModal></SettingsModal>
       <View style={styles.appContainer}>
         <Text style={styles.title}>pomodoro</Text>
         <View style={styles.outerStatusContainer}>
@@ -328,30 +307,5 @@ const styles = StyleSheet.create({
   optionsButton: {
     zIndex: 2,
   },
-  modalHeaderContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E3E1E1",
-  },
-  settingsTitleText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#161932"
-  }, // Need to ensure close button style is correct // probably also needs a larger container
-  modalContentContainer: {
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  optionsSection: {
-    paddingVertical: 24
-  },
-  optionsSectionTitle: {
-    fontSize: 11,
-    fontWeight: "bold",
-    letterSpacing: 4.23,
-    color: "#161932"
-  }
+  
 });
