@@ -5,6 +5,7 @@ import ArrowDownIcon from "../../../assets/icon-arrow-down.svg";
 import ArrowUpIcon from "../../../assets/icon-arrow-up.svg";
 import styles from "./SettingsModal.styles";
 import Divider from "../divider/Divider";
+import colours from "../../constants/colours"
 
 const modeAndMinutes = [
   { mode: "pomodoro", minutes: 25 },
@@ -64,11 +65,11 @@ export default function SettingsModal() {
           <View style={styles.settingSectionContainer}>
             <Text style={styles.optionsSectionTitle}>COLOR</Text>
             <View style={styles.styleButtonsContainer}>
-              <Pressable style={styles.styleSelectionButton}>
-                <Icon name="check" type="entypo" color="green" size={20} />
+              <Pressable style={[styles.styleSelectionButton, styles.coralSelectionButton]}>
+                <Icon name="check" type="entypo" color={colours.indigoBlack} size={20} />
               </Pressable>
-              <Pressable style={styles.styleSelectionButton}></Pressable>
-              <Pressable style={styles.styleSelectionButton}></Pressable>
+              <Pressable style={[styles.styleSelectionButton, styles.aquaSelectionButton]}></Pressable>
+              <Pressable style={[styles.styleSelectionButton, styles.lilacSelectionButton]}></Pressable>
             </View>
           </View>
         </View>

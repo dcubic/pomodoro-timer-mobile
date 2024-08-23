@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import colours from "../../constants/colours";
 
 export default StyleSheet.create({
   modalContainer: {
@@ -10,24 +11,24 @@ export default StyleSheet.create({
     alignItems: "center",
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: "#E3E1E1",
+    borderBottomColor: colours.dividerGray,
   },
   settingsTitleText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#161932",
+    color: colours.indigoBlack,
   }, // Need to ensure close button style is correct // probably also needs a larger container
   modalContentContainer: {
     flexDirection: "column",
     alignItems: "center",
     height: "100%",
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
   },
   settingSectionContainer: {
     flexDirection: "column",
     width: "100%",
     alignItems: "center",
-    paddingVertical: 24
+    paddingVertical: 24,
   },
   optionsSection: {
     paddingVertical: 24,
@@ -36,33 +37,33 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     letterSpacing: 4.23,
-    color: "#161932",
+    color: colours.indigoBlack,
     paddingBottom: 14,
-    includeFontPadding: false
+    includeFontPadding: false,
   },
   timeInputsContainer: {
     width: "100%",
-    gap: 8
+    gap: 8,
   },
   modeAndIncrementContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   modeText: {
     includeFontPadding: false,
     fontSize: 14,
-    color: "#1E213F",
-    opacity: 0.4
+    color: colours.navyBlue,
+    opacity: 0.4,
   },
   timeAdjustmentContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#EFF1FA",
+    backgroundColor: colours.ghostWhite,
     width: 140,
     height: 40,
-    borderRadius: 10
+    borderRadius: 10,
   },
   incrementButtonContainer: {
     justifyContent: "center",
@@ -74,19 +75,27 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    color: "#1E213F",
-    includeFontPadding: false
+    color: colours.navyBlue,
+    includeFontPadding: false,
   },
   styleButtonsContainer: {
     flexDirection: "row",
-    gap: 16
+    gap: 16,
   },
   styleSelectionButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#EFF1FA",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+  },
+  coralSelectionButton: {
+    backgroundColor: colours.coral
+  },
+  aquaSelectionButton: {
+    backgroundColor: colours.aqua
+  },
+  lilacSelectionButton: {
+    backgroundColor: colours.lilac
   }
 });
