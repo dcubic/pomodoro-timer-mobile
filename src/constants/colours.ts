@@ -8,4 +8,6 @@ export default {
   ghostWhite: "#EFF1FA",
   indigoBlack: "#161932",
   dividerGray: "#E3E1E1",
+  midnightBlue: "#0E112A",
+  slateGray: "#2E325A"
 };
