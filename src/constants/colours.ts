@@ -7,5 +7,5 @@ export default {
   white: "#FFFFFF",
   ghostWhite: "#EFF1FA",
   indigoBlack: "#161932",
-  dividerGray: "#E3E1E1"
+  dividerGray: "#E3E1E1",
 };

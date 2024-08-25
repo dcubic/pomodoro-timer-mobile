@@ -25,8 +25,14 @@ const LONG_PRESS_DURATION = 1000;
 const VIBRATION_DURATION = 30;
 
 export default function App() {
+  const [colourSelection, setColourSelection] = useState("coral");
+  const [fontSelection, setFontSelection] = useState("kumbh sans");
   const [initialTimerDurations, setInitialTimerDurations] =
     useState(BOOT_TIMER_DURATIONS);
+  console.log(colourSelection);
+  console.log(fontSelection);
+  console.log(initialTimerDurations);
+  
   const [timerDuration, setTimerDuration] = useState(
     BOOT_TIMER_DURATIONS.active
   );
@@ -41,6 +47,7 @@ export default function App() {
     typeof setTimeout
   > | null>(null);
   const [beforePressPlayingState, setBeforePressPlayingState] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const getActiveTimerState = () => {
     if (stateCounter % 2 === 0) {
@@ -124,7 +131,16 @@ export default function App() {
   return (
     <View style={styles.background}>
       <StatusBar style="light" />
-      <SettingsModal></SettingsModal>
+      <SettingsModal
+        showSettingsModal={showSettingsModal}
+        setShowSettingsModal={setShowSettingsModal}
+        colourSelection={colourSelection}
+        setColourSelection={setColourSelection}
+        fontSelection={fontSelection}
+        setFontSelection={setFontSelection}
+        initialTimerDurations={initialTimerDurations}
+        setInitialTimerDurations={setInitialTimerDurations}
+      ></SettingsModal>
       <View style={styles.appContainer}>
         <Text style={styles.title}>pomodoro</Text>
         <View style={styles.outerStatusContainer}>
@@ -197,7 +213,10 @@ export default function App() {
             </Shadow>
           </Shadow>
         </View>
-        <Pressable style={styles.optionsButton}>
+        <Pressable
+          style={styles.optionsButton}
+          onPress={() => setShowSettingsModal(true)}
+        >
           <SettingsIcon fill="black" />
         </Pressable>
       </View>
@@ -305,7 +324,12 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   optionsButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    aspectRatio: 1,
+    minWidth: 32,
+    minHeight: 48,
+    maxHeight: 48,
     zIndex: 2,
   },
-  
 });

@@ -1,9 +1,27 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import colours from "../../constants/colours";
 
+const windowWidth = Dimensions.get("window").width;
+
 export default StyleSheet.create({
+  modal: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    backgroundColor: "blue",
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modalContainer: {
     flexDirection: "column",
+    borderRadius: 15,
+    justifyContent: "center",
+    backgroundColor: colours.white,
+    width: windowWidth - 48,
   },
   modalHeaderContainer: {
     flexDirection: "row",
@@ -18,10 +36,17 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: colours.indigoBlack,
   }, // Need to ensure close button style is correct // probably also needs a larger container
+  closeIconButton: {
+    aspectRatio: 1,
+    minHeight: 24,
+    maxHeight: 32,
+    minWidth: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   modalContentContainer: {
     flexDirection: "column",
     alignItems: "center",
-    height: "100%",
     paddingHorizontal: 24,
   },
   settingSectionContainer: {
@@ -69,6 +94,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+    height: "100%"
   },
   minutesText: {
     flex: 1,
@@ -90,12 +116,39 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   coralSelectionButton: {
-    backgroundColor: colours.coral
+    backgroundColor: colours.coral,
   },
   aquaSelectionButton: {
-    backgroundColor: colours.aqua
+    backgroundColor: colours.aqua,
   },
   lilacSelectionButton: {
-    backgroundColor: colours.lilac
-  }
+    backgroundColor: colours.lilac,
+  },
+  activeFontButton: {
+    backgroundColor: colours.indigoBlack,
+    fontSize: 15,
+  },
+  inactiveFontButton: {
+    backgroundColor: colours.ghostWhite,
+    fontSize: 15,
+  },
+  activeFontSelection: {
+    color: colours.white,
+  },
+  inactiveFontSelection: {
+    color: colours.navyBlue,
+  },
+  applyButton: {
+    width: 140,
+    height: 53,
+    backgroundColor: colours.coral,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 100,
+    transform: [{ translateY: 26.5 }],
+  },
+  applyButtonText: {
+    fontSize: 16,
+    color: colours.white,
+  },
 });
