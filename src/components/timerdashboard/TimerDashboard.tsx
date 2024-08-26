@@ -108,7 +108,6 @@ export default function TimerDashboard({
   };
 
   useEffect(() => {
-    console.log(initialTimerDurations);
     resetPomodoroTimer();
   }, [initialTimerDurations]);
 
@@ -164,6 +163,30 @@ export default function TimerDashboard({
     );
   };
 
+  const getActiveStatusTextFont = () => {
+    if (fontSelection === 'kumbh sans') {
+      return styles.kumbhSansBold
+    }
+
+    if (fontSelection === 'roboto slab') {
+      return styles.robotoSlabBold
+    }
+
+    return styles.spaceMonoBold
+  }
+
+  const getTimeRemainingFontStyle = () => {
+    if (fontSelection === 'kumbh sans') {
+      return styles.kumbhSansBold
+    }
+
+    if (fontSelection === 'roboto slab') {
+      return styles.robotoSlabBold
+    }
+
+    return styles.spaceMonoTimeRemaining
+  }
+
   return (
     <View style={styles.appContainer}>
       <Text style={styles.title}>pomodoro</Text>
@@ -175,7 +198,7 @@ export default function TimerDashboard({
                 key={timerState}
                 style={() => getStatusStyle(timerState)}
               >
-                <Text style={styles.activeStatusText}>{timerState}</Text>
+                <Text style={[styles.activeStatusText, getActiveStatusTextFont()]}>{timerState}</Text>
               </Pressable>
             );
           })}
@@ -224,7 +247,7 @@ export default function TimerDashboard({
                       onPressOut={handlePressOut}
                       style={styles.displayContainer}
                     >
-                      <Text style={[styles.timeRemainingText]}>
+                      <Text style={[styles.timeRemainingText, getTimeRemainingFontStyle()]}>
                         {getRemainingTimeText(remainingTime)}
                       </Text>
                       <Text style={styles.timerStatusToggleText}>

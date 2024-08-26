@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 import colours from "../../constants/colours";
+import { fonts } from "../../constants/fonts";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -33,9 +34,9 @@ export default StyleSheet.create({
   },
   settingsTitleText: {
     fontSize: 24,
-    fontWeight: "bold",
     color: colours.indigoBlack,
-  }, // Need to ensure close button style is correct // probably also needs a larger container
+    fontFamily: fonts.kumbhSansBold,
+  },
   closeIconButton: {
     aspectRatio: 1,
     minHeight: 24,
@@ -60,7 +61,7 @@ export default StyleSheet.create({
   },
   optionsSectionTitle: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: fonts.kumbhSansBold,
     letterSpacing: 4.23,
     color: colours.indigoBlack,
     paddingBottom: 14,
@@ -78,6 +79,7 @@ export default StyleSheet.create({
   modeText: {
     includeFontPadding: false,
     fontSize: 14,
+    fontFamily: fonts.kumbhSansBold,
     color: colours.navyBlue,
     opacity: 0.4,
   },
@@ -100,7 +102,7 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: "center",
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: fonts.kumbhSansBold,
     color: colours.navyBlue,
     includeFontPadding: false,
   },
@@ -150,5 +152,15 @@ export default StyleSheet.create({
   applyButtonText: {
     fontSize: 16,
     color: colours.white,
+    fontFamily: fonts.kumbhSansBold,
   },
+  kumbhSansBold: {
+    fontFamily: fonts.kumbhSansBold
+  },
+  robotoSlabRegular: {
+    fontFamily: fonts.robotoSlabRegular
+  },
+  spaceMonoBold: {
+    fontFamily: fonts.spaceMonoBold
+  }
 });

@@ -1,5 +1,7 @@
 export const fonts = {
-    kumbhSans: "",
-    robotoSlab: "",
-    spaceMono: "",
-}
+  kumbhSansBold: "KumbhSans-Bold",
+  robotoSlabRegular: "RobotoSlab-Regular",
+  robotoSlabBold: "RobotoSlab-Bold",
+  spaceMonoRegular: "SpaceMono-Regular",
+  spaceMonoBold: "SpaceMono-Bold",
+};

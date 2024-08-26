@@ -9,9 +9,11 @@ export const loadFonts = () =>
     "SpaceMono-Regular": require("../../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
+const settingsKey = "userSettings";
+
 export const loadSettings = async () => {
   try {
-    const savedSettings = await AsyncStorage.getItem("userSettings");
+    const savedSettings = await AsyncStorage.getItem(settingsKey);
     return savedSettings
       ? (JSON.parse(savedSettings) as BootSettings)
       : defaultBootSettings;
@@ -23,11 +25,13 @@ export const loadSettings = async () => {
 export interface BootSettings {
   colourSelection: string;
   fontSelection: string;
-  timerDurations: {
-    active: number;
-    shortBreak: number;
-    longBreak: number;
-  };
+  timerDurations: TimerDurations;
+}
+
+export interface TimerDurations {
+  active: number;
+  shortBreak: number;
+  longBreak: number;
 }
 
 export const defaultBootSettings: BootSettings = {
@@ -38,4 +42,10 @@ export const defaultBootSettings: BootSettings = {
     shortBreak: 5,
     longBreak: 15,
   },
+};
+
+export const saveSettings = async (settings: BootSettings) => {
+  AsyncStorage.setItem(settingsKey, JSON.stringify(settings)).catch((error) =>
+    console.error("error setting settings: " + JSON.stringify(settings))
+  );
 };

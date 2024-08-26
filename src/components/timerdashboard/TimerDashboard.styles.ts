@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import colours from "../../constants/colours";
+import { fonts } from "../../constants/fonts";
 
 export default StyleSheet.create({
   background: {
@@ -18,7 +19,7 @@ export default StyleSheet.create({
   title: {
     fontSize: 24,
     color: colours.periwinkle,
-    fontWeight: "bold",
+    fontFamily: fonts.kumbhSansBold,
     zIndex: 2,
   },
   outerStatusContainer: {
@@ -45,12 +46,10 @@ export default StyleSheet.create({
     flex: 1,
     height: "100%",
     borderRadius: 100,
-
   },
   activeStatusText: {
     color: colours.navyBlue,
     fontSize: 12,
-    fontWeight: "bold",
     includeFontPadding: false,
     textAlignVertical: "center",
   },
@@ -87,7 +86,6 @@ export default StyleSheet.create({
   timeRemainingText: {
     color: colours.periwinkle,
     fontSize: 80,
-    fontWeight: "bold",
   },
   timerStatusToggleText: {
     color: colours.periwinkle,
@@ -107,4 +105,20 @@ export default StyleSheet.create({
     maxHeight: 48,
     zIndex: 2,
   },
+  kumbhSansBold: {
+    fontFamily: fonts.kumbhSansBold
+  },
+  robotoSlabBold: {
+    fontFamily: fonts.robotoSlabBold
+  },
+  spaceMonoRegular: {
+    fontFamily: fonts.spaceMonoRegular
+  },
+  spaceMonoBold: {
+    fontFamily: fonts.spaceMonoBold
+  },
+  spaceMonoTimeRemaining: {
+    fontFamily: fonts.spaceMonoRegular,
+    letterSpacing: -6
+  }
 });

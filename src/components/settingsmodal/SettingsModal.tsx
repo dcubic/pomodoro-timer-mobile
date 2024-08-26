@@ -8,6 +8,7 @@ import Divider from "../divider/Divider";
 import colours from "../../constants/colours";
 import { useState } from "react";
 import TimerDurations from "../shared/TimerDurations";
+import { saveSettings } from "../../bootutils/bootutils";
 
 const modeDisplayNames = {
   active: "pomodoro",
@@ -22,6 +23,21 @@ const colourAndStyles = [
   { colour: "aqua", style: styles.aquaSelectionButton },
   { colour: "lilac", style: styles.lilacSelectionButton },
 ];
+
+const MINUTES_MAX = 25;
+const MINUTES_MIN = 1;
+
+const getFontStyle = (fontName: string) => {
+  if (fontName == "kumbh sans") {
+    return styles.kumbhSansBold
+  }
+
+  if (fontName == "roboto slab") {
+    return styles.robotoSlabRegular
+  }
+
+  return styles.spaceMonoBold
+}
 
 interface SettingsModalProps {
   showSettingsModal: boolean;
@@ -59,7 +75,7 @@ export default function SettingsModal({
       return {
         ...oldDurations,
         [modeVariableName]: Math.min(
-          25,
+          MINUTES_MAX,
           oldDurations[modeVariableName as keyof typeof modeDisplayNames] + 1
         ),
       };
@@ -71,7 +87,7 @@ export default function SettingsModal({
       return {
         ...oldDurations,
         [modeVariableName]: Math.max(
-          1,
+          MINUTES_MIN,
           oldDurations[modeVariableName as keyof typeof modeDisplayNames] - 1
         ),
       };
@@ -82,6 +98,11 @@ export default function SettingsModal({
     setColourSelection(tentativeColourSelection);
     setFontSelection(tentativeFontSelection);
     setInitialTimerDurations(tentativeDurations);
+    saveSettings({
+      colourSelection: tentativeColourSelection,
+      fontSelection: tentativeFontSelection,
+      timerDurations: tentativeDurations,
+    });
     setShowSettingsModal(false);
   };
 
@@ -164,6 +185,7 @@ export default function SettingsModal({
                         tentativeFontSelection === fontName
                           ? styles.activeFontSelection
                           : styles.inactiveFontSelection,
+                        getFontStyle(fontName)
                       ]}
                     >
                       Aa
