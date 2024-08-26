@@ -81,7 +81,7 @@ export default function SettingsModal({
       };
     });
   };
-
+  
   const decrementDuration = (modeVariableName: string) => {
     setTentativeDurations((oldDurations) => {
       return {

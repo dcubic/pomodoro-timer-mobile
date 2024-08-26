@@ -90,7 +90,6 @@ export default StyleSheet.create({
   timerStatusToggleText: {
     color: colours.periwinkle,
     fontSize: 14,
-    fontWeight: "bold",
     letterSpacing: 13,
   },
   borderShadow: {
@@ -119,6 +118,6 @@ export default StyleSheet.create({
   },
   spaceMonoTimeRemaining: {
     fontFamily: fonts.spaceMonoRegular,
-    letterSpacing: -6
+    letterSpacing: -7
   }
 });

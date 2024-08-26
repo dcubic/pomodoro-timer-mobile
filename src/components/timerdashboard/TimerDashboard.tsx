@@ -20,7 +20,7 @@ enum TimerState {
 const BOOT_ACTIVE_STATE_COUNT = 4;
 const LONG_PRESS_DURATION = 1000;
 const VIBRATION_DURATION = 30;
-const SECONDS_PER_MINUTE = 1;
+const SECONDS_PER_MINUTE = 60;
 const DROP_SHADOW_OFFSET_MAGNITUDE = 50;
 const DROP_SHADOW_RADIUS = 100;
 const TIMER_DIAMETER = 248;
@@ -250,7 +250,7 @@ export default function TimerDashboard({
                       <Text style={[styles.timeRemainingText, getTimeRemainingFontStyle()]}>
                         {getRemainingTimeText(remainingTime)}
                       </Text>
-                      <Text style={styles.timerStatusToggleText}>
+                      <Text style={[styles.timerStatusToggleText, getActiveStatusTextFont()]}>
                         {getTimerButtonText()}
                       </Text>
                     </Pressable>
