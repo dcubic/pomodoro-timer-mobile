@@ -9,5 +9,11 @@ export default {
   indigoBlack: "#161932",
   dividerGray: "#E3E1E1",
   midnightBlue: "#0E112A",
-  slateGray: "#2E325A"
+  slateGray: "#2E325A",
+  black: "black",
+  transparent: "rgba(0, 0, 0, 0)",
+  lightTransparentNavy: "rgba(39, 44, 90, 0.2)",
+  fullyTransparentNavy: "rgba(39, 44, 90, 0)",
+  semiTransparentDarkNavy: "rgba(18, 21, 48, 0.3)",
+  fullyTransparentDarkNavy: "rgba(18, 21, 48, 0)",
 };

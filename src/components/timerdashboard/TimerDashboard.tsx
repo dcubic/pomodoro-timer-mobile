@@ -20,7 +20,11 @@ enum TimerState {
 const BOOT_ACTIVE_STATE_COUNT = 4;
 const LONG_PRESS_DURATION = 1000;
 const VIBRATION_DURATION = 30;
-const SECONDS_PER_MINUTE = 60;
+const SECONDS_PER_MINUTE = 1;
+const DROP_SHADOW_OFFSET_MAGNITUDE = 50;
+const DROP_SHADOW_RADIUS = 100;
+const TIMER_DIAMETER = 248;
+const DISPLAY_DIGIT_COUNT = 2;
 
 interface TimerDashboardProps {
   colourSelection: string;
@@ -99,7 +103,7 @@ export default function TimerDashboard({
   const resetPomodoroTimer = () => {
     resetCircleTimer();
     setStateCounter(0);
-    setTimerDuration(initialTimerDurations.active);
+    setTimerDuration(initialTimerDurations.active * SECONDS_PER_MINUTE);
     setIsPlaying(false);
   };
 
@@ -146,6 +150,20 @@ export default function TimerDashboard({
     return colours.coral;
   };
 
+  const getRemainingTimeText = (remainingTime: number) => {
+    return (
+      String(Math.floor(remainingTime / SECONDS_PER_MINUTE)).padStart(
+        DISPLAY_DIGIT_COUNT,
+        "0"
+      ) +
+      ":" +
+      String(remainingTime % SECONDS_PER_MINUTE).padStart(
+        DISPLAY_DIGIT_COUNT,
+        "0"
+      )
+    );
+  };
+
   return (
     <View style={styles.appContainer}>
       <Text style={styles.title}>pomodoro</Text>
@@ -165,17 +183,23 @@ export default function TimerDashboard({
       </View>
       <View>
         <Shadow
-          distance={100}
-          offset={[-50, -50]}
-          startColor={"rgba(39, 44, 90, 0.2)"}
-          endColor={"rgba(39, 44, 90, 0)"}
+          distance={DROP_SHADOW_RADIUS}
+          offset={[
+            -DROP_SHADOW_OFFSET_MAGNITUDE,
+            -DROP_SHADOW_OFFSET_MAGNITUDE,
+          ]}
+          startColor={colours.lightTransparentNavy}
+          endColor={colours.fullyTransparentNavy}
           style={styles.borderShadow}
         >
           <Shadow
-            distance={100}
-            offset={[50, 50]}
-            startColor={"rgba(18, 21, 48, 0.3)"}
-            endColor={"rgba(18, 21, 48, 0)"}
+            distance={DROP_SHADOW_RADIUS}
+            offset={[
+              DROP_SHADOW_OFFSET_MAGNITUDE,
+              DROP_SHADOW_OFFSET_MAGNITUDE,
+            ]}
+            startColor={colours.semiTransparentDarkNavy}
+            endColor={colours.fullyTransparentDarkNavy}
             style={styles.borderShadow}
           >
             <LinearGradient
@@ -190,8 +214,8 @@ export default function TimerDashboard({
                   isPlaying={isPlaying}
                   duration={timerDuration}
                   colors={getRequiredColour() as ColorFormat}
-                  size={248}
-                  trailColor="rgba(0, 0, 0, 0)"
+                  size={TIMER_DIAMETER}
+                  trailColor={colours.transparent as ColorFormat}
                   onComplete={handleTimerCompletion}
                 >
                   {({ remainingTime }) => (
@@ -201,12 +225,7 @@ export default function TimerDashboard({
                       style={styles.displayContainer}
                     >
                       <Text style={[styles.timeRemainingText]}>
-                        {String(Math.floor(remainingTime / 60)).padStart(
-                          2,
-                          "0"
-                        ) +
-                          ":" +
-                          String(remainingTime % 60).padStart(2, "0")}
+                        {getRemainingTimeText(remainingTime)}
                       </Text>
                       <Text style={styles.timerStatusToggleText}>
                         {getTimerButtonText()}
@@ -223,7 +242,7 @@ export default function TimerDashboard({
         style={styles.optionsButton}
         onPress={() => setShowSettingsModal(true)}
       >
-        <SettingsIcon fill="black" />
+        <SettingsIcon />
       </Pressable>
     </View>
   );

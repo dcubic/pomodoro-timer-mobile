@@ -1,25 +1,64 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
+
 import SettingsModal from "./src/components/settingsmodal/SettingsModal";
 import TimerDashboard from "./src/components/timerdashboard/TimerDashboard";
 import colours from "./src/constants/colours";
+import {
+  loadFonts,
+  loadSettings,
+  defaultBootSettings,
+} from "./src/bootutils/bootutils";
 
-const BOOT_TIMER_DURATIONS = {
-  active: 1,
-  shortBreak: 1,
-  longBreak: 1,
-};
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [colourSelection, setColourSelection] = useState("coral");
-  const [fontSelection, setFontSelection] = useState("kumbh sans");
-  const [initialTimerDurations, setInitialTimerDurations] =
-    useState(BOOT_TIMER_DURATIONS);
+  const [isAppReady, setIsAppReady] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [colourSelection, setColourSelection] = useState(
+    defaultBootSettings.colourSelection
+  );
+  const [fontSelection, setFontSelection] = useState(
+    defaultBootSettings.fontSelection
+  );
+  const [initialTimerDurations, setInitialTimerDurations] = useState(
+    defaultBootSettings.timerDurations
+  );
+
+  useEffect(() => {
+    const loadFontsAndSettings = async () => {
+      try {
+        const [_, loadedSettings] = await Promise.all([
+          loadFonts(),
+          loadSettings(),
+        ]);
+        setColourSelection(loadedSettings.colourSelection);
+        setFontSelection(loadedSettings.fontSelection);
+        setInitialTimerDurations(loadedSettings.timerDurations);
+      } catch (error) {
+        console.warn(error);
+      } finally {
+        setIsAppReady(true);
+      }
+    };
+
+    loadFontsAndSettings();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (isAppReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [isAppReady]);
+
+  if (!isAppReady) {
+    return null;
+  }
 
   return (
-    <View style={styles.background}>
+    <View style={styles.background} onLayout={onLayoutRootView}>
       <StatusBar style="light" />
       <SettingsModal
         showSettingsModal={showSettingsModal}
