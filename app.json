@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pomodoro-timer-mobile",
-    "slug": "pomodoro-timer-mobile",
+    "name": "Pomodoro Timer Mobile",
+    "slug": "pomodoro_timer_mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,16 +15,23 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dcubicdev.pomodoro_timer_mobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "54099259-d829-42e4-a2c7-6de5316c722f"
+      }
+    }
   }
 }

@@ -35,8 +35,8 @@ export interface TimerDurations {
 }
 
 export const defaultBootSettings: BootSettings = {
-  colourSelection: "colour",
-  fontSelection: "coral",
+  colourSelection: "coral",
+  fontSelection: "kumbh sans",
   timerDurations: {
     active: 25,
     shortBreak: 5,

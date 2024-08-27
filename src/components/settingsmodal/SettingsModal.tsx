@@ -6,7 +6,7 @@ import ArrowUpIcon from "../../../assets/icon-arrow-up.svg";
 import styles from "./SettingsModal.styles";
 import Divider from "../divider/Divider";
 import colours from "../../constants/colours";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import TimerDurations from "../shared/TimerDurations";
 import { saveSettings } from "../../bootutils/bootutils";
 
@@ -24,20 +24,21 @@ const colourAndStyles = [
   { colour: "lilac", style: styles.lilacSelectionButton },
 ];
 
-const MINUTES_MAX = 25;
 const MINUTES_MIN = 1;
+const MINUTES_MAX = 25;
+const INCREMENT_TIMEOUT = 200;
 
 const getFontStyle = (fontName: string) => {
   if (fontName == "kumbh sans") {
-    return styles.kumbhSansBold
+    return styles.kumbhSansBold;
   }
 
   if (fontName == "roboto slab") {
-    return styles.robotoSlabRegular
+    return styles.robotoSlabRegular;
   }
 
-  return styles.spaceMonoBold
-}
+  return styles.spaceMonoBold;
+};
 
 interface SettingsModalProps {
   showSettingsModal: boolean;
@@ -70,6 +71,12 @@ export default function SettingsModal({
   const [tentativeFontSelection, setTentativeFontSelection] =
     useState(fontSelection);
 
+  console.log("tentativeDurations: " + JSON.stringify(tentativeDurations));
+  console.log("tentativeColourSelection: " + tentativeColourSelection);
+  console.log("tentativeFontSelection: " + tentativeFontSelection);
+  const isPressingRef = useRef(false);
+  const incrementIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   const incrementDuration = (modeVariableName: string) => {
     setTentativeDurations((oldDurations) => {
       return {
@@ -81,7 +88,7 @@ export default function SettingsModal({
       };
     });
   };
-  
+
   const decrementDuration = (modeVariableName: string) => {
     setTentativeDurations((oldDurations) => {
       return {
@@ -93,6 +100,39 @@ export default function SettingsModal({
       };
     });
   };
+
+  const handleIncrement = useCallback(
+    (modeVariableName: string) => {
+      incrementDuration(modeVariableName);
+      isPressingRef.current = true;
+      incrementIntervalRef.current = setInterval(() => {
+        if (isPressingRef.current) {
+          incrementDuration(modeVariableName);
+        }
+      }, INCREMENT_TIMEOUT);
+    },
+    [incrementDuration]
+  );
+
+  const handleDecrement = useCallback(
+    (modeVariableName: string) => {
+      decrementDuration(modeVariableName);
+      isPressingRef.current = true;
+      incrementIntervalRef.current = setInterval(() => {
+        if (isPressingRef.current) {
+          decrementDuration(modeVariableName);
+        }
+      }, INCREMENT_TIMEOUT);
+    },
+    [incrementDuration]
+  );
+
+  const handleRelease = useCallback(() => {
+    isPressingRef.current = false;
+    if (incrementIntervalRef.current) {
+      clearInterval(incrementIntervalRef.current);
+    }
+  }, []);
 
   const applySettingsAndClose = () => {
     setColourSelection(tentativeColourSelection);
@@ -143,7 +183,8 @@ export default function SettingsModal({
                     <View style={styles.timeAdjustmentContainer}>
                       <Pressable
                         style={styles.incrementButtonContainer}
-                        onPress={() => decrementDuration(modeVariableName)}
+                        onPressIn={() => handleDecrement(modeVariableName)}
+                        onPressOut={handleRelease}
                       >
                         <ArrowDownIcon />
                       </Pressable>
@@ -156,7 +197,8 @@ export default function SettingsModal({
                       </Text>
                       <Pressable
                         style={styles.incrementButtonContainer}
-                        onPress={() => incrementDuration(modeVariableName)}
+                        onPressIn={() => handleIncrement(modeVariableName)}
+                        onPressOut={handleRelease}
                       >
                         <ArrowUpIcon />
                       </Pressable>
@@ -185,7 +227,7 @@ export default function SettingsModal({
                         tentativeFontSelection === fontName
                           ? styles.activeFontSelection
                           : styles.inactiveFontSelection,
-                        getFontStyle(fontName)
+                        getFontStyle(fontName),
                       ]}
                     >
                       Aa
