@@ -10,7 +10,7 @@ import {
   loadFonts,
   loadSettings,
   defaultBootSettings,
-} from "./src/bootutils/bootutils";
+} from "./src/utils/bootutils";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,13 +27,6 @@ export default function App() {
     defaultBootSettings.timerDurations
   );
 
-  console.log("defaultBootSettings: " + JSON.stringify(defaultBootSettings));
-  console.log("colourSelection: " + colourSelection);
-  console.log("fontSelection: " + fontSelection);
-  console.log(
-    "initialTimerDurations: " + JSON.stringify(initialTimerDurations)
-  );
-
   useEffect(() => {
     const loadFontsAndSettings = async () => {
       try {
@@ -41,7 +34,6 @@ export default function App() {
           loadFonts(),
           loadSettings(),
         ]);
-        console.log("loadedSettings: " + JSON.stringify(loadedSettings));
         setColourSelection(loadedSettings.colourSelection);
         setFontSelection(loadedSettings.fontSelection);
         setInitialTimerDurations(loadedSettings.timerDurations);
@@ -54,8 +46,6 @@ export default function App() {
 
     loadFontsAndSettings();
   }, []);
-
-  console.log("-".repeat(60));
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {

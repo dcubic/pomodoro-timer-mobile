@@ -8,7 +8,7 @@ import Divider from "../divider/Divider";
 import colours from "../../constants/colours";
 import { useCallback, useRef, useState } from "react";
 import TimerDurations from "../shared/TimerDurations";
-import { saveSettings } from "../../bootutils/bootutils";
+import { saveSettings } from "../../utils/bootutils";
 
 const modeDisplayNames = {
   active: "pomodoro",
@@ -71,9 +71,6 @@ export default function SettingsModal({
   const [tentativeFontSelection, setTentativeFontSelection] =
     useState(fontSelection);
 
-  console.log("tentativeDurations: " + JSON.stringify(tentativeDurations));
-  console.log("tentativeColourSelection: " + tentativeColourSelection);
-  console.log("tentativeFontSelection: " + tentativeFontSelection);
   const isPressingRef = useRef(false);
   const incrementIntervalRef = useRef<NodeJS.Timeout | null>(null);
 

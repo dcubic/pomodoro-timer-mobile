@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import TimerDurations from "../shared/TimerDurations";
 import SettingsIcon from "../../../assets/icon-settings.svg";
 import colours from "../../constants/colours";
+import { playRingSound } from "../../utils/playringsound";
 
 enum TimerState {
   Active = "pomodoro",
@@ -19,7 +20,7 @@ enum TimerState {
 
 const BOOT_ACTIVE_STATE_COUNT = 4;
 const LONG_PRESS_DURATION = 1000;
-const VIBRATION_DURATION = 30;
+const HAPTIC_VIBRATION_DURATION = 30;
 const SECONDS_PER_MINUTE = 60;
 const DROP_SHADOW_OFFSET_MAGNITUDE = 50;
 const DROP_SHADOW_RADIUS = 100;
@@ -93,6 +94,7 @@ export default function TimerDashboard({
   }, [stateCounter]);
 
   const handleTimerCompletion = () => {
+    playRingSound();
     setStateCounter((counterCurrent) => counterCurrent + 1);
   };
 
@@ -112,12 +114,12 @@ export default function TimerDashboard({
   }, [initialTimerDurations]);
 
   const handlePressIn = () => {
-    Vibration.vibrate(VIBRATION_DURATION);
+    Vibration.vibrate(HAPTIC_VIBRATION_DURATION);
     setBeforePressPlayingState(isPlaying);
     const timer = setTimeout(() => {
       resetPomodoroTimer();
       setIsLongPressing(false);
-      Vibration.vibrate(VIBRATION_DURATION);
+      Vibration.vibrate(HAPTIC_VIBRATION_DURATION);
     }, LONG_PRESS_DURATION);
     setLongPressTimer(timer);
     setIsLongPressing(true);
@@ -164,28 +166,28 @@ export default function TimerDashboard({
   };
 
   const getActiveStatusTextFont = () => {
-    if (fontSelection === 'kumbh sans') {
-      return styles.kumbhSansBold
+    if (fontSelection === "kumbh sans") {
+      return styles.kumbhSansBold;
     }
 
-    if (fontSelection === 'roboto slab') {
-      return styles.robotoSlabBold
+    if (fontSelection === "roboto slab") {
+      return styles.robotoSlabBold;
     }
 
-    return styles.spaceMonoBold
-  }
+    return styles.spaceMonoBold;
+  };
 
   const getTimeRemainingFontStyle = () => {
-    if (fontSelection === 'kumbh sans') {
-      return styles.kumbhSansBold
+    if (fontSelection === "kumbh sans") {
+      return styles.kumbhSansBold;
     }
 
-    if (fontSelection === 'roboto slab') {
-      return styles.robotoSlabBold
+    if (fontSelection === "roboto slab") {
+      return styles.robotoSlabBold;
     }
 
-    return styles.spaceMonoTimeRemaining
-  }
+    return styles.spaceMonoTimeRemaining;
+  };
 
   return (
     <View style={styles.appContainer}>
@@ -198,7 +200,11 @@ export default function TimerDashboard({
                 key={timerState}
                 style={() => getStatusStyle(timerState)}
               >
-                <Text style={[styles.activeStatusText, getActiveStatusTextFont()]}>{timerState}</Text>
+                <Text
+                  style={[styles.activeStatusText, getActiveStatusTextFont()]}
+                >
+                  {timerState}
+                </Text>
               </Pressable>
             );
           })}
@@ -247,10 +253,20 @@ export default function TimerDashboard({
                       onPressOut={handlePressOut}
                       style={styles.displayContainer}
                     >
-                      <Text style={[styles.timeRemainingText, getTimeRemainingFontStyle()]}>
+                      <Text
+                        style={[
+                          styles.timeRemainingText,
+                          getTimeRemainingFontStyle(),
+                        ]}
+                      >
                         {getRemainingTimeText(remainingTime)}
                       </Text>
-                      <Text style={[styles.timerStatusToggleText, getActiveStatusTextFont()]}>
+                      <Text
+                        style={[
+                          styles.timerStatusToggleText,
+                          getActiveStatusTextFont(),
+                        ]}
+                      >
                         {getTimerButtonText()}
                       </Text>
                     </Pressable>
