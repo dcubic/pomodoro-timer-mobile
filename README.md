@@ -2,10 +2,10 @@ A preview APK is available for download [here](https://github.com/dcubic/pomodor
 
 # Screenshots
 
-![Screenshot 1](screenshots/colourscheme1.jpg | width=300)
+<img src="screenshots/colourscheme1.jpg" width="300" alt="Screenshot 1">
 
-![Screenshot 2](screenshots/colourscheme2.jpg | width=300)
+<img src="screenshots/colourscheme2.jpg" width="300" alt="Screenshot 2">
 
-![Screenshot 3](screenshots/colourscheme3.jpg | width=300)
+<img src="screenshots/colourscheme3.jpg" width="300" alt="Screenshot 3">
 
-![Options](screenshots/options.jpg | width=300)
+<img src="screenshots/options.jpg" width="300" alt="Options">
